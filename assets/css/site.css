@@ -134,7 +134,7 @@ p { max-width: 65ch; }
 }
 
 /* ---------- Hero ---------- */
-.hero { position: relative; padding-top: 0; padding-bottom: clamp(2.5rem, 5vw, 4.5rem); overflow: hidden; }
+.hero { position: relative; padding-top: clamp(1.25rem, 2.5vw, 2.25rem); padding-bottom: clamp(2.5rem, 5vw, 4.5rem); overflow: hidden; }
 .hero::before {
   content: "";
   position: absolute;
