@@ -52,7 +52,7 @@ function readJson(req, callback) {
   });
 }
 
-const server = http.createServer(async (req, res) => {
+async function requestHandler(req, res) {
   // CORS Preflight
   if (req.method === 'OPTIONS') {
     res.writeHead(204, {
@@ -260,21 +260,27 @@ const server = http.createServer(async (req, res) => {
 
     fs.createReadStream(filePath).pipe(res);
   });
-});
+}
 
-// Initialize database and start HTTP server
-db.initDb().then(() => {
-  server.listen(PORT, () => {
-    console.log('====================================================');
-    console.log(`  Verna Developers Website & Neon PG API is running!`);
-    console.log(`  Local URL:    http://localhost:${PORT}`);
-    console.log(`  Admin Panel:  http://localhost:${PORT}/admin`);
-    console.log(`  Neon DB:      Connected & Synchronized`);
-    console.log('====================================================');
+const server = http.createServer(requestHandler);
+
+// Initialize database and start HTTP server when run directly
+if (require.main === module) {
+  db.initDb().then(() => {
+    server.listen(PORT, () => {
+      console.log('====================================================');
+      console.log(`  Verna Developers Website & Neon PG API is running!`);
+      console.log(`  Local URL:    http://localhost:${PORT}`);
+      console.log(`  Admin Panel:  http://localhost:${PORT}/admin`);
+      console.log(`  Neon DB:      Connected & Synchronized`);
+      console.log('====================================================');
+    });
+  }).catch(err => {
+    console.error('Fatal database initialization error:', err);
+    server.listen(PORT, () => {
+      console.log(`Server listening on port ${PORT} (fallback mode)`);
+    });
   });
-}).catch(err => {
-  console.error('Fatal database initialization error:', err);
-  server.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT} (fallback mode)`);
-  });
-});
+}
+
+module.exports = requestHandler;

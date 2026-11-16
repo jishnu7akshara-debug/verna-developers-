@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.js" },
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/services", "destination": "/services.html" },
+    { "source": "/departments", "destination": "/departments.html" },
+    { "source": "/properties", "destination": "/services.html" },
+    { "source": "/team", "destination": "/team.html" },
+    { "source": "/contact", "destination": "/contact.html" }
+  ]
+}
