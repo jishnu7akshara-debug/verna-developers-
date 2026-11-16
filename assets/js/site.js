@@ -266,23 +266,22 @@
     });
   });
 
-  /* ---------- Enquiry form ---------- */
-  var form = $('[data-enquiry]');
-  if (form) {
+  /* ---------- Enquiry forms & WhatsApp Direct Submissions ---------- */
+  $$('[data-enquiry]').forEach(function (form) {
     var status = $('[data-form-status]', form);
     var submit = $('button[type="submit"]', form);
-    var submitLabel = submit.textContent;
+    var submitLabel = submit ? submit.textContent : 'Send enquiry';
     var phoneFallback = form.getAttribute('data-phone') || '96202 53180';
     var startedAt = 0;
     form.addEventListener('focusin', function () { if (!startedAt) startedAt = Date.now(); });
 
     var rules = {
-      name: function (v) { return v.trim().length >= 2 ? '' : 'Enter your name.'; },
+      name: function (v) { return v && v.trim().length >= 2 ? '' : 'Enter your name.'; },
       phone: function (v) {
-        var d = v.replace(/\D/g, '');
+        var d = (v || '').replace(/\D/g, '');
         return d.length >= 10 && d.length <= 13 ? '' : 'Enter a phone number with at least 10 digits.';
       },
-      email: function (v) { return !v.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? '' : 'Check the email address, or leave it empty.'; }
+      email: function (v) { return !v || !v.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? '' : 'Check the email address, or leave it empty.'; }
     };
     var consentBox = form.elements.consent;
     var consentOk = function () {
@@ -318,13 +317,12 @@
 
     Object.keys(rules).forEach(function (name) {
       var input = form.elements[name];
-      if (!input) return;
+      if (!input || typeof input.addEventListener !== 'function') return;
       input.addEventListener('blur', function () { if (input.value) validate(input); });
       input.addEventListener('input', function () { if (input.getAttribute('aria-invalid')) validate(input); });
     });
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+    var validateAll = function () {
       setStatus('', '');
       var firstBad = null;
       Object.keys(rules).forEach(function (name) {
@@ -333,10 +331,14 @@
         if (!validate(input) && !firstBad) firstBad = input;
       });
       if (consentBox && !consentOk() && !firstBad) firstBad = consentBox;
-      if (firstBad) { firstBad.focus(); return; }
-      if (form.elements.website && form.elements.website.value) return; /* honeypot: bots fill this, people never see it */
+      if (firstBad) {
+        firstBad.focus();
+        return false;
+      }
+      return true;
+    };
 
-      var endpoint = form.getAttribute('data-endpoint') || '/api/enquiry';
+    var getPayload = function () {
       var payload = {};
       ['name', 'phone', 'email', 'interest', 'message'].forEach(function (k) {
         var el = form.elements[k];
@@ -347,10 +349,21 @@
       payload.startedAt = startedAt;
       var key = form.getAttribute('data-access-key');
       if (key) payload.access_key = key;
+      return payload;
+    };
+
+    // Standard Form Submit (via email & database)
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!validateAll()) return;
+      if (form.elements.website && form.elements.website.value) return; /* honeypot */
+
+      var endpoint = form.getAttribute('data-endpoint') || '/api/enquiry';
+      var payload = getPayload();
 
       if (submit) {
         submit.disabled = true;
-        submit.textContent = 'Sending enquiry';
+        submit.textContent = 'Sending enquiry...';
       }
       var ctrl = 'AbortController' in window ? new AbortController() : null;
       var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 15000);
@@ -362,7 +375,7 @@
       }).then(function (res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         form.reset();
-        setStatus('ok', 'Enquiry sent. We will call you back shortly.');
+        setStatus('ok', 'Enquiry sent successfully. We will call you back shortly.');
       }).catch(function () {
         setStatus('error', 'Your enquiry was not sent. Check your connection and send it again, or call ' + phoneFallback + '.');
       }).then(function () {
@@ -373,7 +386,69 @@
         }
       });
     });
-  }
+
+    // Ensure WhatsApp submit button exists
+    var waBtn = $('[data-whatsapp-submit]', form);
+    if (!waBtn && submit) {
+      var parentActions = submit.parentElement.classList.contains('form-actions') ? submit.parentElement : null;
+      if (!parentActions) {
+        parentActions = document.createElement('div');
+        parentActions.className = 'form-actions';
+        submit.parentNode.insertBefore(parentActions, submit);
+        parentActions.appendChild(submit);
+      }
+      waBtn = document.createElement('button');
+      waBtn.type = 'button';
+      waBtn.className = 'btn btn-whatsapp';
+      waBtn.setAttribute('data-whatsapp-submit', '');
+      waBtn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3Z"/></svg><span>Send via WhatsApp</span>';
+      parentActions.appendChild(waBtn);
+    }
+
+    // Direct WhatsApp Submission Handler
+    if (waBtn) {
+      waBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (!validateAll()) return;
+
+        var payload = getPayload();
+        var waPhone = '919620253180';
+
+        var lines = [
+          '*New Property Enquiry - Verna Developers*',
+          '',
+          '👤 *Name:* ' + (payload.name || 'Not provided'),
+          '📞 *Phone:* ' + (payload.phone || 'Not provided'),
+          '📧 *Email:* ' + (payload.email || 'Not provided'),
+          '📋 *Regarding:* ' + (payload.interest || 'Property / Liaison Enquiry'),
+          '📝 *Details:* ' + (payload.message || 'Please connect with me regarding this enquiry.'),
+          '',
+          '📍 *Source:* ' + (document.title || location.pathname)
+        ];
+        var text = encodeURIComponent(lines.join('\n'));
+        var waUrl = 'https://wa.me/' + waPhone + '?text=' + text;
+
+        setStatus('ok', 'Connecting you directly to WhatsApp...');
+
+        // Asynchronously save lead in database so inquiry is stored in Admin Portal
+        var endpoint = form.getAttribute('data-endpoint') || '/api/enquiry';
+        var dbPayload = Object.assign({}, payload, {
+          message: (payload.message ? payload.message + ' ' : '') + '[Sent via Direct WhatsApp Button]'
+        });
+        fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dbPayload)
+        }).catch(function () {});
+
+        // Open WhatsApp in new tab / app
+        var opened = window.open(waUrl, '_blank');
+        if (!opened || opened.closed || typeof opened.closed === 'undefined') {
+          window.location.href = waUrl;
+        }
+      });
+    }
+  });
 
   // ==================== Dynamic Public Testimonials Loader ====================
   var testiContainer = document.getElementById('public-testimonials-container');
