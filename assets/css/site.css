@@ -287,14 +287,14 @@ p { max-width: 65ch; }
 /* Team */
 .team-grid { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); }
 .member { display: grid; gap: 1rem; }
-.member-photo { position: relative; aspect-ratio: 4 / 5; background: var(--cream-2); overflow: hidden; display: flex; align-items: flex-end; justify-content: center; }
-.member-photo::before { content: ""; position: absolute; inset: var(--frame); border: 1px solid var(--line); z-index: 1; }
-.member-photo img { position: relative; height: 92%; width: auto; max-width: 92%; object-fit: contain; object-position: bottom; transition: transform 1s var(--ease-expo); }
-.member:hover .member-photo img { transform: translateY(-.5rem); }
+.member-photo { position: relative; aspect-ratio: 4 / 5; background: #1a1716; overflow: hidden; display: block; border-radius: var(--radius-sm, 6px); box-shadow: 0 10px 28px -8px rgba(0, 0, 0, 0.4); }
+.member-photo::before { display: none !important; }
+.member-photo img { position: relative; width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: transform 0.6s var(--ease-expo); display: block; }
+.member:hover .member-photo img { transform: scale(1.03); }
 .member h3 { color: var(--navy); }
 .dark .member h3 { color: var(--on-navy); }
-.dark .member-photo { background: var(--navy-2); }
-.dark .member-photo::before { border-color: var(--line-on-navy); }
+.dark .member-photo { background: #1a1716; border: 1px solid rgba(255, 255, 255, 0.1); }
+.dark .member-photo::before { display: none !important; }
 
 /* Clients */
 .logo-marquee { --mgap: 0rem; border-block: 1px solid var(--line); background: var(--surface); }
