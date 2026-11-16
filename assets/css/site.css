@@ -139,11 +139,11 @@ p { max-width: 65ch; }
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url('../img/hero-consultant-bg.webp');
+  background-image: url('../img/hero-deeds-bg.webp');
   background-size: cover;
-  background-position: center right;
+  background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.15;
+  opacity: 0.16;
   pointer-events: none;
   z-index: 0;
   filter: saturate(0.85);
