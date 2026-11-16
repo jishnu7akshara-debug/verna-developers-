@@ -1,0 +1,130 @@
+[
+  {
+    "id": "client-peel",
+    "name": "Peel Plywood",
+    "logo": "assets/img/clients/peel.webp",
+    "category": "Industrial & Manufacturing",
+    "featured": true,
+    "order": 1
+  },
+  {
+    "id": "client-paraag",
+    "name": "Hotel Paraag",
+    "logo": "assets/img/clients/paraag.webp",
+    "category": "Hospitality & Commercial",
+    "featured": true,
+    "order": 2
+  },
+  {
+    "id": "client-tmax",
+    "name": "TmaxSoft",
+    "logo": "assets/img/clients/tmax.webp",
+    "category": "Enterprise Technology",
+    "featured": true,
+    "order": 3
+  },
+  {
+    "id": "client-hilltop",
+    "name": "Hilltop Granite Official",
+    "logo": "assets/img/clients/hilltop-granite.webp",
+    "category": "Mining & Infrastructure",
+    "featured": true,
+    "order": 4
+  },
+  {
+    "id": "client-spt",
+    "name": "SPT Group",
+    "logo": "assets/img/clients/spt.webp",
+    "category": "Real Estate & Housing",
+    "featured": true,
+    "order": 5
+  },
+  {
+    "id": "client-raja",
+    "name": "Raja Capital",
+    "logo": "assets/img/clients/raja.webp",
+    "category": "Capital & Real Estate",
+    "featured": true,
+    "order": 6
+  },
+  {
+    "id": "client-namaste",
+    "name": "Namaste Exports",
+    "logo": "assets/img/clients/namaste-exports.webp",
+    "category": "Export & Manufacturing",
+    "featured": true,
+    "order": 7
+  },
+  {
+    "id": "client-prince",
+    "name": "Prince Pipes",
+    "logo": "assets/img/clients/prince-pipes.webp",
+    "category": "Industrial Infrastructure",
+    "featured": true,
+    "order": 8
+  },
+  {
+    "id": "client-upkar",
+    "name": "Upkar Developers",
+    "logo": "assets/img/clients/upkar-dev.webp",
+    "category": "Real Estate Development",
+    "featured": true,
+    "order": 9
+  },
+  {
+    "id": "client-prakash",
+    "name": "Prakash Tea",
+    "logo": "assets/img/clients/prakash-tea.webp",
+    "category": "Agro & FMCG",
+    "featured": true,
+    "order": 10
+  },
+  {
+    "id": "client-sasken",
+    "name": "Sasken Technologies",
+    "logo": "assets/img/clients/sasken.webp",
+    "category": "Telecom & Tech",
+    "featured": true,
+    "order": 11
+  },
+  {
+    "id": "client-newindia",
+    "name": "New India Assurance",
+    "logo": "assets/img/clients/new-india.webp",
+    "category": "Financial Services",
+    "featured": true,
+    "order": 12
+  },
+  {
+    "id": "client-gogas",
+    "name": "GoGas",
+    "logo": "assets/img/clients/gogas.webp",
+    "category": "Energy & Gas Infrastructure",
+    "featured": true,
+    "order": 13
+  },
+  {
+    "id": "client-axis",
+    "name": "Axis Capstone",
+    "logo": "assets/img/clients/axis-capstone.webp",
+    "category": "Luxury Real Estate",
+    "featured": true,
+    "order": 14
+  },
+  {
+    "id": "client-blooms",
+    "name": "Blooms & Plants",
+    "logo": "assets/img/clients/blooms.webp",
+    "category": "Floriculture & Exports",
+    "featured": true,
+    "order": 15
+  },
+  {
+    "id": "client-bid",
+    "name": "Bid & Hammer",
+    "logo": "assets/img/clients/bid-and-hammer.webp",
+    "category": "Art & Auction House",
+    "featured": true,
+    "order": 16
+  }
+]

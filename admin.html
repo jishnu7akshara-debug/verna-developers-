@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Portal | Verna Developers</title>
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <style>
+    :root {
+      --admin-navy: #10224A;
+      --admin-dark: #0A1325;
+      --admin-gold: #C5A059;
+      --admin-red: #9B1B26;
+      --admin-bg: #F5F7FB;
+      --admin-card: #FFFFFF;
+      --admin-border: #E2E8F0;
+      --admin-text: #1E293B;
+      --admin-muted: #64748B;
+    }
+    body {
+      background: var(--admin-bg);
+      color: var(--admin-text);
+      font-family: inherit;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    /* Auth Modal Overlay */
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 19, 37, 0.88);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      padding: 1rem;
+    }
+    .login-box {
+      background: #FFFFFF;
+      border-radius: 12px;
+      padding: clamp(2rem, 5vw, 2.75rem);
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--admin-border);
+      text-align: center;
+    }
+    .login-logo {
+      width: 170px;
+      height: auto;
+      margin-bottom: 1.5rem;
+    }
+    .login-box h2 {
+      font-size: 1.4rem;
+      color: var(--admin-navy);
+      margin: 0 0 0.5rem;
+    }
+    .login-box p.sub {
+      color: var(--admin-muted);
+      font-size: 0.88rem;
+      margin: 0 0 1.5rem;
+    }
+    .login-demo-pill {
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      color: #1E40AF;
+      font-size: 0.78rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+      display: inline-block;
+    }
+    .admin-form-group {
+      text-align: left;
+      margin-bottom: 1.25rem;
+    }
+    .admin-form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--admin-text);
+      margin-bottom: 0.35rem;
+    }
+    .admin-input, .admin-select, .admin-textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--admin-border);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      background: #FFFFFF;
+      color: var(--admin-text);
+      transition: border-color 0.2s ease;
+    }
+    .admin-input:focus, .admin-select:focus, .admin-textarea:focus {
+      outline: none;
+      border-color: var(--admin-navy);
+      box-shadow: 0 0 0 3px rgba(16, 34, 74, 0.1);
+    }
+    .admin-btn {
+      background: var(--admin-navy);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 6px;
+      padding: 0.8rem 1.4rem;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background 0.2s ease, transform 0.15s ease;
+      text-decoration: none;
+    }
+    .admin-btn:hover {
+      background: #18336E;
+      transform: translateY(-1px);
+    }
+    .admin-btn-red {
+      background: var(--admin-red);
+    }
+    .admin-btn-red:hover {
+      background: #B91C1C;
+    }
+    .admin-btn-outline {
+      background: transparent;
+      color: var(--admin-text);
+      border: 1px solid var(--admin-border);
+    }
+    .admin-btn-outline:hover {
+      background: #F1F5F9;
+    }
+
+    /* Admin Navigation & Header */
+    .admin-topbar {
+      background: var(--admin-navy);
+      color: #FFFFFF;
+      padding: 0.85rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .topbar-brand img {
+      height: 38px;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+    .topbar-brand span {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .user-tag {
+      font-size: 0.8rem;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Tabs Header */
+    .admin-tabs-nav {
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--admin-border);
+      padding: 0 1.75rem;
+      display: flex;
+      gap: 2rem;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 1.1rem 0.2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--admin-muted);
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s ease;
+    }
+    .tab-btn:hover {
+      color: var(--admin-navy);
+    }
+    .tab-btn.active {
+      color: var(--admin-navy);
+      font-weight: 700;
+    }
+    .tab-btn.active::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--admin-navy);
+      border-radius: 3px 3px 0 0;
+    }
+    .badge-count {
+      background: #E2E8F0;
+      color: #334155;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+    .tab-btn.active .badge-count {
+      background: #EFF6FF;
+      color: #1D4ED8;
+    }
+
+    /* Main Container */
+    .admin-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    .section-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+    .section-header-row h1 {
+      font-size: 1.6rem;
+      color: var(--admin-navy);
+      margin: 0;
+    }
+    .section-header-row p {
+      color: var(--admin-muted);
+      margin: 0.35rem 0 0;
+      font-size: 0.92rem;
+    }
+
+    /* Testimonials Grid */
+    .testimonials-admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+    .testi-admin-card {
+      background: var(--admin-card);
+      border: 1px solid var(--admin-border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      position: relative;
+    }
+    .testi-card-top {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .testi-avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--admin-border);
+      background: #F1F5F9;
+    }
+    .testi-author h4 {
+      margin: 0 0 0.2rem;
+      font-size: 1.05rem;
+      color: var(--admin-text);
+    }
+    .testi-author span {
+      font-size: 0.8rem;
+      color: var(--admin-muted);
+      display: block;
+    }
+    .testi-stars {
+      color: #F59E0B;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      margin-bottom: 0.75rem;
+    }
+    .testi-quote {
+      font-size: 0.9rem;
+      color: #334155;
+      line-height: 1.55;
+      font-style: italic;
+      margin-bottom: 1.25rem;
+      flex: 1;
+    }
+    .testi-card-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--admin-border);
+      padding-top: 0.9rem;
+      margin-top: auto;
+    }
+    .status-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+    .status-pill.active {
+      background: #DCFCE7;
+      color: #166534;
+    }
+    .status-pill.new {
+      background: #DBEAFE;
+      color: #1E40AF;
+    }
+    .status-pill.progress {
+      background: #F3E8FF;
+      color: #6B21A8;
+    }
+    .status-pill.contacted {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+    .status-pill.closed {
+      background: #E2E8F0;
+      color: #475569;
+    }
+    .card-actions-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .btn-icon {
+      padding: 0.4rem 0.75rem;
+      font-size: 0.82rem;
+    }
+
+    /* Enquiries Data Table */
+    .table-card {
+      background: #FFFFFF;
+      border: 1px solid var(--admin-border);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .table-toolbar {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--admin-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: #FAFAFA;
+    }
+    .search-input {
+      max-width: 320px;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .admin-table th {
+      background: #F8FAFC;
+      padding: 0.85rem 1.25rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--admin-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--admin-border);
+    }
+    .admin-table td {
+      padding: 1.1rem 1.25rem;
+      border-bottom: 1px solid var(--admin-border);
+      font-size: 0.88rem;
+      vertical-align: top;
+    }
+    .admin-table tr:hover td {
+      background: #F8FAFC;
+    }
+    .lead-name-col b {
+      display: block;
+      color: var(--admin-text);
+      font-size: 0.95rem;
+    }
+    .lead-contact-links {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.35rem;
+      font-size: 0.82rem;
+    }
+    .lead-contact-links a {
+      color: var(--admin-navy);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .lead-contact-links a:hover {
+      text-decoration: underline;
+    }
+    .notes-box {
+      background: #FFFBEB;
+      border-left: 3px solid #F59E0B;
+      padding: 0.4rem 0.6rem;
+      font-size: 0.8rem;
+      color: #78350F;
+      margin-top: 0.4rem;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* Modal Styling */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 10001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-box {
+      background: #FFFFFF;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 580px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+    .modal-head {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--admin-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-head h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: var(--admin-navy);
+    }
+    .modal-body {
+      padding: 1.5rem;
+    }
+    .modal-foot {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--admin-border);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      background: #F8FAFC;
+    }
+    .image-preview-box {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .image-preview-box img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--admin-border);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== LOGIN GATEWAY ==================== -->
+  <div id="login-modal" class="login-overlay">
+    <div class="login-box">
+      <img src="assets/img/verna-logo-dark.png" alt="Verna Developers" class="login-logo">
+      <h2>Admin Control Center</h2>
+      <p class="sub">Manage client testimonials, edit enquiry requests & portal content.</p>
+      
+      <form id="admin-login-form">
+        <div class="admin-form-group">
+          <label for="l-pass" style="display: flex; justify-content: space-between; font-weight: 600; color: var(--admin-navy);">
+            <span>Master Password</span>
+            <span style="font-size: 0.78rem; font-weight: 400; color: var(--admin-muted);">Default: verna2026</span>
+          </label>
+          <div style="position: relative;">
+            <input type="password" id="l-pass" class="admin-input" placeholder="Enter master password..." required autofocus style="padding-right: 2.75rem;">
+            <button type="button" id="toggle-pass-btn" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #64748B; font-size: 1.1rem; padding: 0.2rem;" title="Toggle password visibility">👁</button>
+          </div>
+        </div>
+        <p id="login-error" style="color: #DC2626; font-size: 0.85rem; margin-bottom: 1rem; display: none;">Incorrect master password. Access denied.</p>
+        <button type="submit" class="admin-btn" style="width: 100%;">Unlock Admin Portal →</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== ADMIN PORTAL APP ==================== -->
+  <div id="admin-app" style="display: none;">
+    <!-- Topbar -->
+    <header class="admin-topbar">
+      <div class="topbar-brand">
+        <img src="assets/img/verna-logo-white.png" alt="Verna Developers">
+        <span>Administration Console</span>
+      </div>
+      <div class="topbar-actions">
+        <a href="index.html" target="_blank" class="admin-btn admin-btn-outline" style="color: #fff; border-color: rgba(255,255,255,0.3); font-size: 0.82rem; padding: 0.4rem 0.8rem;">
+          View Public Site ↗
+        </a>
+        <div class="user-tag">
+          <span>●</span> Logged in as <b>Administrator</b>
+        </div>
+        <button id="logout-btn" class="admin-btn admin-btn-outline" style="color: #fff; border-color: rgba(255,255,255,0.3); font-size: 0.82rem; padding: 0.4rem 0.8rem;">
+          Log Out
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="admin-tabs-nav">
+      <button class="tab-btn active" data-tab="testimonials">
+        💬 Client Testimonials <span class="badge-count" id="count-testi">0</span>
+      </button>
+      <button class="tab-btn" data-tab="clients">
+        🏢 Corporate Clients <span class="badge-count" id="count-clients">0</span>
+      </button>
+      <button class="tab-btn" data-tab="enquiries">
+        📬 Lead Enquiry Requests <span class="badge-count" id="count-enq">0</span>
+      </button>
+      <button class="tab-btn" data-tab="overview">
+        📊 Performance Overview
+      </button>
+    </nav>
+
+    <!-- Content Sections -->
+    <main class="admin-container">
+      
+      <!-- TAB 1: TESTIMONIALS MANAGER -->
+      <section id="tab-testimonials" class="tab-pane">
+        <div class="section-header-row">
+          <div>
+            <h1>Client Testimonials & Reviews</h1>
+            <p>Add, edit with custom photos, delete, and control client endorsements on the website.</p>
+          </div>
+          <button class="admin-btn" id="open-add-testi-btn">
+            + Add New Testimonial
+          </button>
+        </div>
+
+        <div id="testi-loading" style="text-align: center; padding: 3rem; color: var(--admin-muted);">
+          Loading testimonials...
+        </div>
+
+        <div class="testimonials-admin-grid" id="testi-grid">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      
+      <!-- TAB: CORPORATE CLIENTS MANAGER -->
+      <section id="tab-clients" class="tab-pane" style="display: none;">
+        <div class="section-header-row">
+          <div>
+            <h1>Corporate Client Logos & Brands</h1>
+            <p>Add new client logos, edit company details, delete entries, and control the rolling marquee on the website.</p>
+          </div>
+          <button class="admin-btn" id="open-add-client-btn">
+            + Add New Client Logo
+          </button>
+        </div>
+
+        <div id="clients-loading" style="text-align: center; padding: 3rem; color: var(--admin-muted);">
+          Loading clients...
+        </div>
+
+        <div class="clients-admin-grid" id="clients-grid">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- TAB 2: ENQUIRIES / LEADS MANAGER -->
+      <section id="tab-enquiries" class="tab-pane" style="display: none;">
+        <div class="section-header-row">
+          <div>
+            <h1>Lead Enquiries & Service Requests</h1>
+            <p>Direct submissions from buyers, landowners, and corporations seeking government approvals.</p>
+          </div>
+          <div style="display: flex; gap: 0.75rem;">
+            <button class="admin-btn admin-btn-outline" id="export-csv-btn">
+              Download CSV
+            </button>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-toolbar">
+            <input type="text" id="enq-search" class="admin-input search-input" placeholder="Search by name, phone, email...">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span style="font-size: 0.82rem; color: var(--admin-muted); font-weight: 600;">Status:</span>
+              <select id="enq-filter-status" class="admin-select" style="width: auto; padding: 0.45rem 0.8rem; font-size: 0.85rem;">
+                <option value="ALL">All Enquiries</option>
+                <option value="New">New Only</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Contacted">Contacted</option>
+                <option value="Closed">Closed</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Client Contact</th>
+                  <th>Service / Authority</th>
+                  <th>Message & Scope</th>
+                  <th>Status</th>
+                  <th>Received Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="enq-tbody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: OVERVIEW STATS -->
+      <section id="tab-overview" class="tab-pane" style="display: none;">
+        <div class="section-header-row">
+          <div>
+            <h1>Portal Overview & Telemetry</h1>
+            <p>Summary of client requests and active website resources.</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+          <div style="background: #FFFFFF; border: 1px solid var(--admin-border); border-radius: 8px; padding: 1.5rem;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--admin-muted); text-transform: uppercase;">Total Leads Received</span>
+            <h2 id="stat-total-leads" style="font-size: 2.2rem; margin: 0.4rem 0 0; color: var(--admin-navy);">0</h2>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid var(--admin-border); border-radius: 8px; padding: 1.5rem;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: #1D4ED8; text-transform: uppercase;">New Unattended Leads</span>
+            <h2 id="stat-new-leads" style="font-size: 2.2rem; margin: 0.4rem 0 0; color: #1D4ED8;">0</h2>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid var(--admin-border); border-radius: 8px; padding: 1.5rem;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: #15803D; text-transform: uppercase;">Active Endorsements</span>
+            <h2 id="stat-active-testi" style="font-size: 2.2rem; margin: 0.4rem 0 0; color: #15803D;">0</h2>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid var(--admin-border); border-radius: 8px; padding: 1.5rem;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--admin-gold); text-transform: uppercase;">Statutory Authorities</span>
+            <h2 style="font-size: 2.2rem; margin: 0.4rem 0 0; color: #B45309;">8</h2>
+          </div>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid var(--admin-border); border-radius: 8px; padding: 2rem;">
+          <h3 style="margin-top: 0; color: var(--admin-navy);">System Health & Realtime Storage</h3>
+          <p style="color: var(--admin-muted); font-size: 0.92rem; line-height: 1.6;">
+            All enquiries are persisted to <code>leads.json</code> with instant timestamp recording. Testimonials are managed live via <code>testimonials.json</code> and reflect on the public website dynamically.
+          </p>
+          <div style="display: flex; gap: 1rem; margin-top: 1.25rem;">
+            <a href="index.html" class="admin-btn">Preview Live Homepage</a>
+            <a href="departments.html" class="admin-btn admin-btn-outline">Preview 8 Authority Cards</a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ==================== MODAL: ADD / EDIT TESTIMONIAL ==================== -->
+  <div id="testi-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="testi-modal-title">Add Client Testimonial</h3>
+        <button type="button" class="admin-btn-outline" id="close-testi-modal" style="border: none; font-size: 1.2rem; cursor: pointer;">&times;</button>
+      </div>
+      <form id="testi-form">
+        <div class="modal-body">
+          <input type="hidden" id="tm-id">
+          
+          <div class="admin-form-group">
+            <label for="tm-name">Client Name *</label>
+            <input type="text" id="tm-name" class="admin-input" placeholder="e.g. Naveen Rajan" required>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="tm-role">Company / Designation *</label>
+            <input type="text" id="tm-role" class="admin-input" placeholder="e.g. Director, Apex Logistics Parks" required>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="tm-rating">Star Rating (1 - 5 Stars)</label>
+            <select id="tm-rating" class="admin-select">
+              <option value="5">★★★★★ (5 Stars - Exceptional)</option>
+              <option value="4">★★★★☆ (4 Stars - Highly Satisfied)</option>
+              <option value="3">★★★☆☆ (3 Stars - Good)</option>
+            </select>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="tm-comment">Client Endorsement / Review Quote *</label>
+            <textarea id="tm-comment" class="admin-textarea" rows="4" placeholder="Detail the clearance, BDA/BBMP resolution, or property transaction resolved by Verna Developers..." required></textarea>
+          </div>
+
+          <div class="admin-form-group">
+            <label>Client Photo / Corporate Logo</label>
+            <div class="image-preview-box">
+              <img id="tm-preview-img" src="assets/img/clients/axis-capstone.webp" alt="Preview">
+              <div style="flex: 1;">
+                <input type="file" id="tm-file-input" accept="image/*" class="admin-input" style="padding: 0.4rem; font-size: 0.82rem;">
+                <input type="text" id="tm-image-url" class="admin-input" placeholder="Or enter image URL path" value="assets/img/clients/axis-capstone.webp" style="margin-top: 0.4rem; font-size: 0.82rem;">
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-form-group" style="margin-top: 1rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="tm-active" checked style="width: 18px; height: 18px;">
+              <span>Display live on website homepage</span>
+            </label>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="admin-btn admin-btn-outline" id="cancel-testi-btn">Cancel</button>
+          <button type="submit" class="admin-btn" id="save-testi-btn">Save Testimonial</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  
+  <!-- ==================== CLIENT MODAL: ADD / EDIT ==================== -->
+  <div id="client-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="client-modal-title">Add Corporate Client Logo</h3>
+        <button type="button" class="admin-btn-outline" id="close-client-modal" style="border: none; font-size: 1.2rem; cursor: pointer;">&times;</button>
+      </div>
+      <form id="client-form">
+        <div class="modal-body">
+          <input type="hidden" id="c-id">
+
+          <div class="admin-form-group">
+            <label for="c-name">Company / Client Name *</label>
+            <input type="text" id="c-name" class="admin-input" placeholder="e.g. Hotel Paraag, Raja Capital, Peel Plywood" required>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="c-cat">Industry / Sector *</label>
+            <input type="text" id="c-cat" class="admin-input" placeholder="e.g. Hospitality, Real Estate, Enterprise Tech, Manufacturing" required>
+          </div>
+
+          <div class="admin-form-group">
+            <label>Client Logo (Upload or URL) *</label>
+            <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 0.5rem;">
+              <input type="file" id="c-file" accept="image/*" style="display: none;">
+              <button type="button" class="admin-btn admin-btn-outline" id="c-upload-btn" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+                📁 Upload Logo Image
+              </button>
+              <span id="c-upload-status" style="font-size: 0.8rem; color: var(--admin-muted);"></span>
+            </div>
+            <input type="text" id="c-logo" class="admin-input" placeholder="assets/img/clients/paraag.webp or https://..." required>
+            <div id="c-preview-wrap" style="margin-top: 0.75rem; text-align: center; background: #F8FAFC; padding: 1rem; border: 1px dashed var(--admin-border); border-radius: 8px;">
+              <p style="font-size: 0.78rem; color: var(--admin-muted); margin: 0 0 0.5rem;">Logo Preview:</p>
+              <img id="c-preview" src="" alt="Preview" style="max-height: 60px; max-width: 180px; object-fit: contain; display: none;">
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="c-order">Display Sequence Order</label>
+            <input type="number" id="c-order" class="admin-input" value="1" min="1">
+          </div>
+        </div>
+
+        <div class="modal-foot">
+          <button type="button" class="admin-btn admin-btn-outline" id="cancel-client-btn">Cancel</button>
+          <button type="submit" class="admin-btn" id="save-client-btn">Save Client Logo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: EDIT LEAD ENQUIRY ==================== -->
+  <div id="enq-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>Edit Lead & Follow-Up Notes</h3>
+        <button type="button" class="admin-btn-outline" id="close-enq-modal" style="border: none; font-size: 1.2rem; cursor: pointer;">&times;</button>
+      </div>
+      <form id="enq-form">
+        <div class="modal-body">
+          <input type="hidden" id="em-id">
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="admin-form-group">
+              <label for="em-name">Contact Name</label>
+              <input type="text" id="em-name" class="admin-input" required>
+            </div>
+            <div class="admin-form-group">
+              <label for="em-phone">Phone Number</label>
+              <input type="tel" id="em-phone" class="admin-input" required>
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="em-email">Email Address</label>
+            <input type="email" id="em-email" class="admin-input">
+          </div>
+
+          <div class="admin-form-group">
+            <label for="em-interest">Interested Service / Department</label>
+            <input type="text" id="em-interest" class="admin-input">
+          </div>
+
+          <div class="admin-form-group">
+            <label for="em-status">Lead Status</label>
+            <select id="em-status" class="admin-select">
+              <option value="New">New (Pending First Contact)</option>
+              <option value="Contacted">Contacted (Spoke / WhatsApp Sent)</option>
+              <option value="In Progress">In Progress (Documentation under Review)</option>
+              <option value="Closed">Closed / Deal Finalized</option>
+            </select>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="em-message">Client Query / Details</label>
+            <textarea id="em-message" class="admin-textarea" rows="3"></textarea>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="em-notes">Internal Admin Follow-Up Notes</label>
+            <textarea id="em-notes" class="admin-textarea" rows="3" placeholder="Add follow-up notes, consultation dates, documents requested, etc."></textarea>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="admin-btn admin-btn-outline" id="cancel-enq-btn">Cancel</button>
+          <button type="submit" class="admin-btn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT APP LOGIC ==================== -->
+  <script>
+    (function () {
+      var state = {
+        authenticated: false,
+        token: localStorage.getItem('verna_admin_token') || '',
+        testimonials: [],
+        clients: [],
+        enquiries: []
+      };
+
+      // Check session
+      if (state.token) {
+        state.authenticated = true;
+        document.getElementById('login-modal').style.display = 'none';
+        document.getElementById('admin-app').style.display = 'block';
+        loadAllData();
+      }
+
+      // Toggle password visibility
+      var togglePassBtn = document.getElementById('toggle-pass-btn');
+      if (togglePassBtn) {
+        togglePassBtn.addEventListener('click', function () {
+          var pInput = document.getElementById('l-pass');
+          if (pInput.type === 'password') {
+            pInput.type = 'text';
+            togglePassBtn.textContent = '🙈';
+          } else {
+            pInput.type = 'password';
+            togglePassBtn.textContent = '👁';
+          }
+        });
+      }
+
+      // Login form handler (Password-Only)
+      document.getElementById('admin-login-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var p = document.getElementById('l-pass').value.trim();
+        var errEl = document.getElementById('login-error');
+
+        fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: p })
+        })
+        .then(function (res) {
+          if (!res.ok) throw new Error('Auth failed');
+          return res.json();
+        })
+        .then(function (data) {
+          state.token = data.token;
+          state.authenticated = true;
+          localStorage.setItem('verna_admin_token', data.token);
+          errEl.style.display = 'none';
+          document.getElementById('login-modal').style.display = 'none';
+          document.getElementById('admin-app').style.display = 'block';
+          loadAllData();
+        })
+        .catch(function () {
+          errEl.style.display = 'block';
+        });
+      });
+
+      // Logout handler
+      document.getElementById('logout-btn').addEventListener('click', function () {
+        localStorage.removeItem('verna_admin_token');
+        state.authenticated = false;
+        state.token = '';
+        document.getElementById('admin-app').style.display = 'none';
+        document.getElementById('login-modal').style.display = 'flex';
+      });
+
+      // Tab navigation
+      var tabBtns = document.querySelectorAll('.tab-btn');
+      tabBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          tabBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var targetTab = btn.getAttribute('data-tab');
+          document.querySelectorAll('.tab-pane').forEach(function (pane) {
+            pane.style.display = 'none';
+          });
+          var targetEl = document.getElementById('tab-' + targetTab);
+          if (targetEl) targetEl.style.display = 'block';
+        });
+      });
+
+      // Load all data
+      function loadAllData() {
+        loadTestimonials();
+        loadClients();
+        loadEnquiries();
+      }
+
+      // ==================== TESTIMONIALS LOGIC ====================
+      function loadTestimonials() {
+        fetch('/api/testimonials')
+          .then(function (r) { return r.json(); })
+          .then(function (list) {
+            state.testimonials = list;
+            document.getElementById('count-testi').textContent = list.length;
+            document.getElementById('stat-active-testi').textContent = list.filter(function (t) { return t.active; }).length;
+            renderTestimonialsGrid();
+          })
+          .catch(function (err) {
+            console.error('Failed to load testimonials:', err);
+          });
+      }
+
+      function renderTestimonialsGrid() {
+        var grid = document.getElementById('testi-grid');
+        var loading = document.getElementById('testi-loading');
+        loading.style.display = 'none';
+        grid.innerHTML = '';
+
+        if (!state.testimonials.length) {
+          grid.innerHTML = '<p style="color: var(--admin-muted); grid-column: 1/-1; text-align: center; padding: 2rem;">No testimonials found. Add your first client review!</p>';
+          return;
+        }
+
+        state.testimonials.forEach(function (t) {
+          var card = document.createElement('div');
+          card.className = 'testi-admin-card';
+
+          var starsHtml = '★★★★★'.slice(0, t.rating || 5);
+
+          card.innerHTML = [
+            '<div class="testi-card-top">',
+            '  <img src="' + (t.image || 'assets/img/clients/axis-capstone.webp') + '" alt="' + t.name + '" class="testi-avatar" onerror="this.src=\'assets/img/clients/axis-capstone.webp\'">',
+            '  <div class="testi-author">',
+            '    <h4>' + t.name + '</h4>',
+            '    <span>' + t.role + '</span>',
+            '  </div>',
+            '</div>',
+            '<div class="testi-stars">' + starsHtml + '</div>',
+            '<div class="testi-quote">“' + t.comment + '”</div>',
+            '<div class="testi-card-foot">',
+            '  <span class="status-pill ' + (t.active ? 'active' : 'closed') + '">' + (t.active ? '● Live' : 'Hidden') + '</span>',
+            '  <div class="card-actions-group">',
+            '    <button class="admin-btn admin-btn-outline btn-icon edit-testi" data-id="' + t.id + '">✏ Edit</button>',
+            '    <button class="admin-btn admin-btn-red btn-icon del-testi" data-id="' + t.id + '">🗑 Delete</button>',
+            '  </div>',
+            '</div>'
+          ].join('');
+
+          grid.appendChild(card);
+        });
+
+        // Bind Edit buttons
+        grid.querySelectorAll('.edit-testi').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var id = btn.getAttribute('data-id');
+            var item = state.testimonials.find(function (t) { return t.id === id; });
+            if (item) openTestimonialModal(item);
+          });
+        });
+
+        // Bind Delete buttons
+        grid.querySelectorAll('.del-testi').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var id = btn.getAttribute('data-id');
+            if (confirm('Are you sure you want to delete this testimonial?')) {
+              fetch('/api/testimonials/' + id, { method: 'DELETE' })
+                .then(function () {
+                  loadTestimonials();
+                });
+            }
+          });
+        });
+      }
+
+      // Add Testimonial button
+      document.getElementById('open-add-testi-btn').addEventListener('click', function () {
+        openTestimonialModal(null);
+      });
+
+      function openTestimonialModal(item) {
+        var modal = document.getElementById('testi-modal');
+        var title = document.getElementById('testi-modal-title');
+        var idField = document.getElementById('tm-id');
+        var nameField = document.getElementById('tm-name');
+        var roleField = document.getElementById('tm-role');
+        var ratingField = document.getElementById('tm-rating');
+        var commentField = document.getElementById('tm-comment');
+        var imageField = document.getElementById('tm-image-url');
+        var previewImg = document.getElementById('tm-preview-img');
+        var activeField = document.getElementById('tm-active');
+
+        if (item) {
+          title.textContent = 'Edit Client Testimonial';
+          idField.value = item.id;
+          nameField.value = item.name;
+          roleField.value = item.role;
+          ratingField.value = item.rating || 5;
+          commentField.value = item.comment;
+          imageField.value = item.image || 'assets/img/clients/axis-capstone.webp';
+          previewImg.src = item.image || 'assets/img/clients/axis-capstone.webp';
+          activeField.checked = item.active !== false;
+        } else {
+          title.textContent = 'Add New Testimonial';
+          idField.value = '';
+          nameField.value = '';
+          roleField.value = '';
+          ratingField.value = '5';
+          commentField.value = '';
+          imageField.value = 'assets/img/clients/axis-capstone.webp';
+          previewImg.src = 'assets/img/clients/axis-capstone.webp';
+          activeField.checked = true;
+        }
+
+        modal.style.display = 'flex';
+      }
+
+      // File input live preview & upload
+      document.getElementById('tm-file-input').addEventListener('change', function (e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function (evt) {
+          var base64 = evt.target.result;
+          document.getElementById('tm-preview-img').src = base64;
+          // Upload to server
+          fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename: file.name, base64: base64 })
+          })
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (data.url) {
+              document.getElementById('tm-image-url').value = data.url;
+            }
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById('tm-image-url').addEventListener('input', function (e) {
+        document.getElementById('tm-preview-img').src = e.target.value;
+      });
+
+      // Close modal
+      function closeTestiModal() {
+        document.getElementById('testi-modal').style.display = 'none';
+      }
+      var closeTestiBtn = document.getElementById('close-testi-modal');
+      var cancelTestiBtn = document.getElementById('cancel-testi-btn');
+      var testiModalEl = document.getElementById('testi-modal');
+      if (closeTestiBtn) closeTestiBtn.addEventListener('click', closeTestiModal);
+      if (cancelTestiBtn) cancelTestiBtn.addEventListener('click', closeTestiModal);
+      if (testiModalEl) {
+        testiModalEl.addEventListener('click', function(e) {
+          if (e.target === testiModalEl) closeTestiModal();
+        });
+      }
+
+      // Save Testimonial form submit
+      document.getElementById('testi-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var id = document.getElementById('tm-id').value;
+        var payload = {
+          name: document.getElementById('tm-name').value.trim(),
+          role: document.getElementById('tm-role').value.trim(),
+          rating: parseInt(document.getElementById('tm-rating').value, 10),
+          comment: document.getElementById('tm-comment').value.trim(),
+          image: document.getElementById('tm-image-url').value.trim() || 'assets/img/clients/axis-capstone.webp',
+          active: document.getElementById('tm-active').checked
+        };
+
+        var url = id ? ('/api/testimonials/' + id) : '/api/testimonials';
+        var method = id ? 'PUT' : 'POST';
+
+        fetch(url, {
+          method: method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        .then(function (r) { return r.json(); })
+        .then(function () {
+          closeTestiModal();
+          loadTestimonials();
+        })
+        .catch(function (err) {
+          alert('Error saving testimonial: ' + err.message);
+        });
+      });
+
+
+      // ==================== CORPORATE CLIENTS LOGIC ====================
+      function loadClients() {
+        fetch('/api/clients')
+          .then(function (r) { return r.json(); })
+          .then(function (list) {
+            state.clients = list;
+            var countEl = document.getElementById('count-clients');
+            if (countEl) countEl.textContent = list.length;
+            renderClientsGrid();
+          })
+          .catch(function (err) {
+            console.error('Failed to load clients:', err);
+          });
+      }
+
+      function renderClientsGrid() {
+        var grid = document.getElementById('clients-grid');
+        var loading = document.getElementById('clients-loading');
+        if (loading) loading.style.display = 'none';
+        if (!grid) return;
+        grid.innerHTML = '';
+
+        if (!state.clients || !state.clients.length) {
+          grid.innerHTML = '<p style="color: var(--admin-muted); grid-column: 1/-1; text-align: center; padding: 2rem;">No client logos found. Add your first client logo!</p>';
+          return;
+        }
+
+        state.clients.forEach(function (c) {
+          var card = document.createElement('div');
+          card.className = 'client-admin-card';
+
+          card.innerHTML = [
+            '<div class="client-logo-box">',
+            '  <img src="' + c.logo + '" alt="' + (c.name || 'Client') + '" onerror="this.src=\'assets/img/clients/paraag.webp\'">',
+            '</div>',
+            '<h4>' + (c.name || 'Corporate Partner') + '</h4>',
+            '<div class="client-sector">🏷 ' + (c.category || 'Commercial') + '</div>',
+            '<div class="card-actions-group" style="margin-top: auto; display: flex; gap: 0.5rem; justify-content: flex-end;">',
+            '  <button class="admin-btn admin-btn-outline btn-icon edit-client" data-id="' + c.id + '" style="font-size: 0.8rem; padding: 0.35rem 0.65rem;">✏ Edit</button>',
+            '  <button class="admin-btn admin-btn-red btn-icon del-client" data-id="' + c.id + '" style="font-size: 0.8rem; padding: 0.35rem 0.65rem;">🗑 Delete</button>',
+            '</div>'
+          ].join('');
+
+          grid.appendChild(card);
+        });
+
+        // Attach edit handlers
+        document.querySelectorAll('.edit-client').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var cid = this.getAttribute('data-id');
+            var client = state.clients.find(function (x) { return x.id === cid; });
+            if (!client) return;
+
+            document.getElementById('client-modal-title').textContent = 'Edit Client Logo';
+            document.getElementById('c-id').value = client.id;
+            document.getElementById('c-name').value = client.name || '';
+            document.getElementById('c-cat').value = client.category || '';
+            document.getElementById('c-logo').value = client.logo || '';
+            document.getElementById('c-order').value = client.order || 1;
+
+            var prev = document.getElementById('c-preview');
+            prev.src = client.logo || '';
+            prev.style.display = client.logo ? 'inline-block' : 'none';
+
+            document.getElementById('client-modal').style.display = 'flex';
+          });
+        });
+
+        // Attach delete handlers
+        document.querySelectorAll('.del-client').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var cid = this.getAttribute('data-id');
+            var client = state.clients.find(function (x) { return x.id === cid; });
+            var cname = client ? client.name : 'this client';
+            if (!confirm('Are you sure you want to delete "' + cname + '"? It will be removed from the scrolling marquee.')) return;
+
+            fetch('/api/clients/' + cid, { method: 'DELETE' })
+              .then(function (r) { return r.json(); })
+              .then(function () {
+                loadClients();
+              })
+              .catch(function (err) { alert('Delete failed: ' + err.message); });
+          });
+        });
+      }
+
+      // Open Add Client Modal
+      var openClientBtn = document.getElementById('open-add-client-btn');
+      if (openClientBtn) {
+        openClientBtn.addEventListener('click', function () {
+          document.getElementById('client-form').reset();
+          document.getElementById('c-id').value = '';
+          document.getElementById('client-modal-title').textContent = 'Add Corporate Client Logo';
+          var prev = document.getElementById('c-preview');
+          prev.src = '';
+          prev.style.display = 'none';
+          document.getElementById('c-upload-status').textContent = '';
+          document.getElementById('client-modal').style.display = 'flex';
+        });
+      }
+
+      // Close Client Modal
+      function closeClientModal() {
+        document.getElementById('client-modal').style.display = 'none';
+      }
+      var closeClientBtn = document.getElementById('close-client-modal');
+      var cancelClientBtn = document.getElementById('cancel-client-btn');
+      var clientModalEl = document.getElementById('client-modal');
+      if (closeClientBtn) closeClientBtn.addEventListener('click', closeClientModal);
+      if (cancelClientBtn) cancelClientBtn.addEventListener('click', closeClientModal);
+      if (clientModalEl) {
+        clientModalEl.addEventListener('click', function(e) {
+          if (e.target === clientModalEl) closeClientModal();
+        });
+      }
+
+      // Client Logo File Upload handler
+      var cUploadBtn = document.getElementById('c-upload-btn');
+      var cFileInput = document.getElementById('c-file');
+      if (cUploadBtn && cFileInput) {
+        cUploadBtn.addEventListener('click', function () { cFileInput.click(); });
+        cFileInput.addEventListener('change', function () {
+          var file = this.files[0];
+          if (!file) return;
+
+          var statusEl = document.getElementById('c-upload-status');
+          statusEl.textContent = 'Uploading...';
+
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            fetch('/api/upload', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ filename: file.name, base64: e.target.result })
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+              if (data.ok && data.url) {
+                document.getElementById('c-logo').value = data.url;
+                var prev = document.getElementById('c-preview');
+                prev.src = data.url;
+                prev.style.display = 'inline-block';
+                statusEl.textContent = '✓ Uploaded';
+              } else {
+                statusEl.textContent = 'Upload error';
+              }
+            })
+            .catch(function () {
+              statusEl.textContent = 'Upload failed';
+            });
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      // Logo URL input preview update
+      var cLogoInput = document.getElementById('c-logo');
+      if (cLogoInput) {
+        cLogoInput.addEventListener('input', function () {
+          var val = this.value.trim();
+          var prev = document.getElementById('c-preview');
+          if (val) {
+            prev.src = val;
+            prev.style.display = 'inline-block';
+          } else {
+            prev.style.display = 'none';
+          }
+        });
+      }
+
+      // Save Client Form Submission
+      var clientForm = document.getElementById('client-form');
+      if (clientForm) {
+        clientForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var cid = document.getElementById('c-id').value;
+          var payload = {
+            name: document.getElementById('c-name').value.trim(),
+            category: document.getElementById('c-cat').value.trim(),
+            logo: document.getElementById('c-logo').value.trim(),
+            order: parseInt(document.getElementById('c-order').value) || 1,
+            featured: true
+          };
+
+          var url = cid ? ('/api/clients/' + cid) : '/api/clients';
+          var method = cid ? 'PUT' : 'POST';
+
+          fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          })
+          .then(function (r) { return r.json(); })
+          .then(function () {
+            closeClientModal();
+            loadClients();
+          })
+          .catch(function (err) {
+            alert('Failed to save client: ' + err.message);
+          });
+        });
+      }
+
+      // ==================== ENQUIRIES LOGIC ====================
+      function loadEnquiries() {
+        fetch('/api/enquiries')
+          .then(function (r) { return r.json(); })
+          .then(function (list) {
+            state.enquiries = list;
+            document.getElementById('count-enq').textContent = list.length;
+            document.getElementById('stat-total-leads').textContent = list.length;
+            document.getElementById('stat-new-leads').textContent = list.filter(function (l) { return l.status === 'New'; }).length;
+            renderEnquiriesTable();
+          })
+          .catch(function (err) {
+            console.error('Failed to load enquiries:', err);
+          });
+      }
+
+      function renderEnquiriesTable() {
+        var tbody = document.getElementById('enq-tbody');
+        tbody.innerHTML = '';
+
+        var query = (document.getElementById('enq-search').value || '').toLowerCase();
+        var statusFilter = document.getElementById('enq-filter-status').value;
+
+        var filtered = state.enquiries.filter(function (e) {
+          var matchQuery = !query ||
+            (e.name && e.name.toLowerCase().includes(query)) ||
+            (e.phone && e.phone.includes(query)) ||
+            (e.email && e.email.toLowerCase().includes(query)) ||
+            (e.interest && e.interest.toLowerCase().includes(query));
+          
+          var matchStatus = (statusFilter === 'ALL') || (e.status === statusFilter);
+          return matchQuery && matchStatus;
+        });
+
+        if (!filtered.length) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--admin-muted); padding: 2rem;">No enquiries match your search criteria.</td></tr>';
+          return;
+        }
+
+        filtered.forEach(function (e) {
+          var tr = document.createElement('tr');
+
+          var statusClass = 'new';
+          if (e.status === 'In Progress') statusClass = 'progress';
+          else if (e.status === 'Contacted') statusClass = 'contacted';
+          else if (e.status === 'Closed') statusClass = 'closed';
+
+          var dateStr = e.receivedAt ? new Date(e.receivedAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : 'Recent';
+
+          var notesHtml = e.notes ? ('<div class="notes-box"><b>Note:</b> ' + e.notes + '</div>') : '';
+
+          var cleanPhone = (e.phone || '').replace(/\D/g, '');
+
+          tr.innerHTML = [
+            '<td class="lead-name-col">',
+            '  <b>' + (e.name || 'Anonymous') + '</b>',
+            '  <div class="lead-contact-links">',
+            '    <a href="tel:' + cleanPhone + '">📞 ' + (e.phone || 'N/A') + '</a>',
+            cleanPhone ? ('<a href="https://wa.me/91' + cleanPhone.slice(-10) + '" target="_blank" style="color: #16A34A;">💬 WhatsApp</a>') : '',
+            '  </div>',
+            e.email ? ('<div style="font-size: 0.8rem; color: var(--admin-muted); margin-top: 0.2rem;">' + e.email + '</div>') : '',
+            '</td>',
+            '<td><span style="font-weight: 600; color: var(--admin-navy);">' + (e.interest || 'General Property Consultation') + '</span></td>',
+            '<td style="max-width: 280px;">',
+            '  <div style="color: #334155;">' + (e.message || 'No additional details provided.') + '</div>',
+            notesHtml,
+            '</td>',
+            '<td><span class="status-pill ' + statusClass + '">' + (e.status || 'New') + '</span></td>',
+            '<td style="font-size: 0.82rem; color: var(--admin-muted);">' + dateStr + '</td>',
+            '<td>',
+            '  <div class="card-actions-group">',
+            '    <button class="admin-btn admin-btn-outline btn-icon edit-enq" data-id="' + e.id + '">✏ Edit</button>',
+            '    <button class="admin-btn admin-btn-red btn-icon del-enq" data-id="' + e.id + '">🗑 Delete</button>',
+            '  </div>',
+            '</td>'
+          ].join('');
+
+          tbody.appendChild(tr);
+        });
+
+        // Bind Edit buttons
+        tbody.querySelectorAll('.edit-enq').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var id = btn.getAttribute('data-id');
+            var item = state.enquiries.find(function (e) { return e.id === id; });
+            if (item) openEnquiryModal(item);
+          });
+        });
+
+        // Bind Delete buttons
+        tbody.querySelectorAll('.del-enq').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var id = btn.getAttribute('data-id');
+            if (confirm('Are you sure you want to delete this enquiry?')) {
+              fetch('/api/enquiries/' + id, { method: 'DELETE' })
+                .then(function () {
+                  loadEnquiries();
+                });
+            }
+          });
+        });
+      }
+
+      // Filter & Search events
+      document.getElementById('enq-search').addEventListener('input', renderEnquiriesTable);
+      document.getElementById('enq-filter-status').addEventListener('change', renderEnquiriesTable);
+
+      // Open Enquiry Modal
+      function openEnquiryModal(item) {
+        document.getElementById('em-id').value = item.id;
+        document.getElementById('em-name').value = item.name || '';
+        document.getElementById('em-phone').value = item.phone || '';
+        document.getElementById('em-email').value = item.email || '';
+        document.getElementById('em-interest').value = item.interest || '';
+        document.getElementById('em-status').value = item.status || 'New';
+        document.getElementById('em-message').value = item.message || '';
+        document.getElementById('em-notes').value = item.notes || '';
+        document.getElementById('enq-modal').style.display = 'flex';
+      }
+
+      function closeEnquiryModal() {
+        document.getElementById('enq-modal').style.display = 'none';
+      }
+      var closeEnqBtn = document.getElementById('close-enq-modal');
+      var cancelEnqBtn = document.getElementById('cancel-enq-btn');
+      var enqModalEl = document.getElementById('enq-modal');
+      if (closeEnqBtn) closeEnqBtn.addEventListener('click', closeEnquiryModal);
+      if (cancelEnqBtn) cancelEnqBtn.addEventListener('click', closeEnquiryModal);
+      if (enqModalEl) {
+        enqModalEl.addEventListener('click', function(e) {
+          if (e.target === enqModalEl) closeEnquiryModal();
+        });
+      }
+
+      // Save Enquiry form submit
+      document.getElementById('enq-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var id = document.getElementById('em-id').value;
+        var payload = {
+          name: document.getElementById('em-name').value.trim(),
+          phone: document.getElementById('em-phone').value.trim(),
+          email: document.getElementById('em-email').value.trim(),
+          interest: document.getElementById('em-interest').value.trim(),
+          status: document.getElementById('em-status').value,
+          message: document.getElementById('em-message').value.trim(),
+          notes: document.getElementById('em-notes').value.trim()
+        };
+
+        fetch('/api/enquiries/' + id, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        .then(function (r) { return r.json(); })
+        .then(function () {
+          closeEnquiryModal();
+          loadEnquiries();
+        })
+        .catch(function (err) {
+          alert('Error updating enquiry: ' + err.message);
+        });
+      });
+
+      // CSV Export
+      document.getElementById('export-csv-btn').addEventListener('click', function () {
+        if (!state.enquiries.length) {
+          alert('No enquiries to export.');
+          return;
+        }
+        var rows = [
+          ['ID', 'Name', 'Phone', 'Email', 'Service', 'Status', 'Date', 'Message', 'Notes']
+        ];
+        state.enquiries.forEach(function (e) {
+          rows.push([
+            e.id || '',
+            e.name || '',
+            e.phone || '',
+            e.email || '',
+            e.interest || '',
+            e.status || '',
+            e.receivedAt || '',
+            (e.message || '').replace(/"/g, '""'),
+            (e.notes || '').replace(/"/g, '""')
+          ]);
+        });
+        var csvContent = 'data:text/csv;charset=utf-8,' + rows.map(function (r) { return r.map(function (f) { return '"' + f + '"'; }).join(','); }).join('\n');
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', 'verna_enquiries_' + new Date().toISOString().split('T')[0] + '.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+
+    })();
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "testi-1",
+    "name": "Naveen Rajan",
+    "role": "Director, Apex Logistics Parks",
+    "rating": 5,
+    "comment": "Verna Developers regularized our 14-acre KIADB industrial allotment in Dabaspet and secured absolute sale deeds in under 4 months. Exceptional government liaison.",
+    "image": "assets/img/clients/axis-capstone.webp",
+    "date": "2026-02-14",
+    "active": true
+  },
+  {
+    "id": "testi-2",
+    "name": "Suresh K. Reddy",
+    "role": "Managing Partner, Sri Balaji Estates",
+    "rating": 5,
+    "comment": "When our Section 95 agricultural conversion was delayed for 18 months, Ajay and Gurunath resolved the Master Plan buffer zone conflict with BDA and secured the final DC conversion order.",
+    "image": "assets/img/clients/upkar-dev.webp",
+    "date": "2026-01-20",
+    "active": true
+  },
+  {
+    "id": "testi-3",
+    "name": "Arunachalam & Family",
+    "role": "Heritage Property Owner, Kumara Park",
+    "rating": 5,
+    "comment": "They traced 48 years of missing CITB allotment records for our grandfather's Kumara Park property and cleared the high court litigation amicably with full marketable title.",
+    "image": "assets/img/clients/bid-and-hammer.webp",
+    "date": "2025-11-05",
+    "active": true
+  }
+]
