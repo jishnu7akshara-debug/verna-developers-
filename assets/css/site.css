@@ -189,10 +189,10 @@ p { max-width: 65ch; }
 .marquee::-webkit-scrollbar { display: none; }
 .marquee > ul { display: flex; align-items: center; width: max-content; gap: var(--mgap, 3rem); padding-inline: var(--gutter); }
 .marquee-view { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3rem, #000 calc(100% - 8rem), transparent calc(100% - 4rem)); mask-image: linear-gradient(90deg, transparent 0, #000 3rem, #000 calc(100% - 8rem), transparent calc(100% - 4rem)); }
-.marquee-track { display: flex; width: max-content; }
+.marquee-track { display: flex; width: max-content; will-change: transform; transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; }
 .marquee-group { display: flex; align-items: center; flex-shrink: 0; gap: var(--mgap, 3rem); padding-right: var(--mgap, 3rem); }
 .marquee.is-running { overflow: hidden; }
-.marquee.is-running .marquee-track { animation: marquee var(--marquee-dur, 40s) linear infinite; }
+.marquee.is-running .marquee-track { animation: marquee var(--marquee-dur, 60s) linear infinite; }
 .marquee.is-running[data-direction="reverse"] .marquee-track { animation-direction: reverse; }
 .marquee.is-running:hover .marquee-track, .marquee.is-running:focus-within .marquee-track, .marquee[data-paused="true"] .marquee-track { animation-play-state: paused !important; }
 @keyframes marquee { to { transform: translateX(-50%); } }
@@ -302,8 +302,13 @@ p { max-width: 65ch; }
 .logo-marquee img { max-height: clamp(2.75rem, 4.5vw, 3.75rem); width: auto; max-width: 100%; object-fit: contain; transition: transform .3s var(--ease); }
 .logo-marquee li:hover img { transform: scale(1.06); }
 .name-marquee { margin-top: 1.5rem; --mgap: 2.25rem; }
-.name-marquee li { display: flex; align-items: center; gap: 2.25rem; white-space: nowrap; font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 560; font-stretch: 88%; letter-spacing: -.02em; color: var(--graphite); }
+.name-marquee li { display: flex; align-items: center; gap: 2.25rem; white-space: nowrap; font-size: clamp(1.35rem, 3vw, 2.5rem); font-weight: 560; font-stretch: 88%; letter-spacing: -.02em; color: var(--graphite); }
 .name-marquee li::after { content: ""; width: .5rem; height: .5rem; background: var(--red); }
+@media (max-width: 48rem) {
+  .name-marquee { margin-top: 1rem; --mgap: 1.5rem; }
+  .name-marquee li { font-size: 1.25rem; gap: 1.5rem; }
+  .name-marquee.is-running .marquee-track { animation-duration: var(--marquee-dur, 65s) !important; }
+}
 
 /* Sister company */
 .sister { background: var(--red-tint); padding-block: 1.75rem; }

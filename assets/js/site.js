@@ -144,7 +144,7 @@
     });
   }
 
-  /* ---------- Marquees: duplicate the list, loop it smoothly with hover pause ---------- */
+  /* ---------- Marquees: duplicate the list, loop it smoothly with hover/touch pause ---------- */
   function setupMarquee(m) {
     if (reduceMotion) return;
     var list = $('ul', m);
@@ -167,25 +167,57 @@
 
     var originals = $$('li', list);
     var guard = 0;
-    while (list.scrollWidth < window.innerWidth * 1.5 && guard++ < 8) {
-      originals.forEach(function (li) { var c = li.cloneNode(true); c.setAttribute('aria-hidden', 'true'); list.appendChild(c); });
+    // On all viewports (especially iPhone / mobile), guarantee enough content so the marquee never jerks or computes tiny durations
+    var targetWidth = Math.max(window.innerWidth * 2.5, 2400);
+    while (list.scrollWidth < targetWidth && guard++ < 12) {
+      originals.forEach(function (li) {
+        var c = li.cloneNode(true);
+        c.setAttribute('aria-hidden', 'true');
+        list.appendChild(c);
+      });
     }
     var copy = list.cloneNode(true);
     copy.setAttribute('aria-hidden', 'true');
     $$('a, button', copy).forEach(function (el) { el.tabIndex = -1; });
     track.appendChild(copy);
 
-    var pxPerSec = Number(m.getAttribute('data-speed')) || 50;
-    m.style.setProperty('--marquee-dur', (list.scrollWidth / pxPerSec).toFixed(1) + 's');
+    function updateDuration() {
+      var isMobile = window.innerWidth <= 768;
+      var rawSpeed = Number(m.getAttribute('data-speed')) || 32;
+      // On mobile / iPhone, use a calm, steady speed (20-24 px/sec max) so text never races like a train
+      var pxPerSec = isMobile ? Math.min(rawSpeed * 0.65, 24) : Math.min(rawSpeed, 35);
+      var contentWidth = list.scrollWidth || 2000;
+      var dur = Math.max(contentWidth / pxPerSec, isMobile ? 65 : 45);
+      m.style.setProperty('--marquee-dur', dur.toFixed(1) + 's');
+    }
+
+    updateDuration();
     m.classList.add('is-running');
 
-    // Auto pause on hover / resume on mouse leave
+    // Recompute when fonts/images finish loading to prevent the iPhone timing bug
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(updateDuration);
+    }
+    window.addEventListener('load', updateDuration, { once: true });
+    window.addEventListener('resize', updateDuration);
+
+    // Auto pause on hover (desktop)
     m.addEventListener('mouseenter', function () {
       m.setAttribute('data-paused', 'true');
     });
     m.addEventListener('mouseleave', function () {
       m.removeAttribute('data-paused');
     });
+
+    // Auto pause on touch (iPhone / mobile)
+    m.addEventListener('touchstart', function () {
+      m.setAttribute('data-paused', 'true');
+    }, { passive: true });
+    m.addEventListener('touchend', function () {
+      setTimeout(function () {
+        m.removeAttribute('data-paused');
+      }, 1200);
+    }, { passive: true });
   }
 
   $$('[data-marquee]').forEach(setupMarquee);
