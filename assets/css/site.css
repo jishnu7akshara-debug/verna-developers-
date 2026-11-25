@@ -1535,7 +1535,8 @@ p { max-width: 65ch; }
 .site-header.is-scrolled { box-shadow: 0 1px 0 var(--line); }
 .nav a { font-size: .95rem; font-weight: 500; color: var(--ink); }
 @media (max-width: 60rem) {
-  .nav { background: var(--cream); }
+  .site-header { background: var(--cream) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  .nav { background: var(--cream); height: calc(100dvh - var(--header-h)); z-index: 60; }
   .nav li a { font-family: var(--font-display); font-weight: 600; font-stretch: normal; font-size: 2rem; }
 }
 
