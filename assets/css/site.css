@@ -163,9 +163,9 @@ p { max-width: 65ch; }
    one photograph on the right in a soft rounded frame. Nothing else. */
 .hero { position: relative; padding-block: clamp(2rem, 5vw, 4.5rem) clamp(3rem, 6vw, 5.5rem); }
 .hero-grid { display: grid; gap: clamp(2.25rem, 5vw, 3rem); align-items: center; }
-.hero-copy { display: grid; justify-items: start; align-content: center; }
-.hero h1 { font-size: clamp(2.75rem, 1rem + 4.6vw, 5.4rem); letter-spacing: -.03em; line-height: 1.05; }
-@media (min-width: 30rem) { .hero h1 .h-line > span { white-space: nowrap; } }
+.hero-copy { display: grid; justify-items: start; align-content: center; min-width: 0; }
+.hero h1 { font-size: clamp(2.25rem, 1rem + 3.4vw, 4.65rem); letter-spacing: -.03em; line-height: 1.05; max-width: 100%; }
+@media (min-width: 78rem) { .hero h1 .h-line > span { white-space: nowrap; } }
 .h-line { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
 .h-line > span { display: block; animation: rise 1.1s var(--ease-expo) both; }
 .h-line:nth-child(2) > span { animation-delay: .08s; }
@@ -180,7 +180,7 @@ p { max-width: 65ch; }
 .hero-facts, .hero-tag, .hero-inset, .hero-badge { display: none !important; }
 @media (min-width: 60rem) {
   .hero { min-height: calc(100svh - var(--header-h) - 3.6rem); display: grid; align-items: center; padding-top: clamp(1.25rem, 3vw, 2.75rem); }
-  .hero-grid { grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: clamp(2.5rem, 5vw, 5rem); }
+  .hero-grid { grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: clamp(2.25rem, 4vw, 4.5rem); }
   .hero-media { transform: translateY(-1.5rem); }
 }
 @keyframes rise { from { transform: translateY(105%); } }
