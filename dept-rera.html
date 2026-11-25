@@ -6,13 +6,14 @@
   <title>RERA Karnataka Liaison Services | Real Estate Regulatory Authority | Verna Developers</title>
   <meta name="description" content="RERA Karnataka compliance & registration in Bengaluru: project registration, Title Certificates, quarterly filings, promoter advisory, and legal adherence.">
   <link rel="canonical" href="https://www.vernadevelopers.com/dept-rera.html">
-  <meta name="theme-color" content="#F4EFE4">
+  <meta name="theme-color" content="#F5F1E8">
   <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
-  <link rel="preload" href="assets/fonts/bricolage-variable.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/site.css">
-  <script src="assets/js/site.js" defer></script>
+  <link rel="preload" href="assets/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/site.css?v=2037">
+  <script src="assets/js/site.js?v=2034" defer></script>
 </head>
 <body>
   <!-- Page Preloader Animation with Verna Developers Logo -->
@@ -33,7 +34,7 @@
     <div class="wrap header-row">
       <a class="brand" href="index.html" aria-label="Verna Developers, home">
         <span class="vd-mark" aria-hidden="true"></span>
-        <span class="brand-name"><b>Verna Developers</b><span>Your property consultant</span></span>
+        <span class="brand-name"><b>Verna Developers</b><span>Property. Approvals. Solutions.</span></span>
       </a>
       <nav class="nav" id="nav" aria-label="Primary">
         <ul>
@@ -48,7 +49,7 @@
           <a href="https://wa.me/919620253180" rel="noopener">WhatsApp us</a>
         </div>
       </nav>
-      <a class="btn header-cta" href="https://wa.me/919620253180" rel="noopener">WhatsApp us</a>
+      <a class="btn header-cta" href="https://wa.me/919620253180" rel="noopener"><span class="header-cta-text"><b>Contact Us</b><small>WhatsApp</small></span></a>
       <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav">Menu<span aria-hidden="true"></span></button>
     </div>
   </header>
@@ -109,41 +110,6 @@
                 <a class="btn btn-quiet" href="departments.html">← All Authorities</a>
               </div>
             </div>
-
-            <form class="form" data-enquiry data-endpoint="/api/enquiry" data-phone="96202 53180" novalidate style="margin-top: 2rem;">
-              <h4>Submit RERA Inquiry</h4>
-              <div class="field">
-                <label for="f-name">Your Name</label>
-                <input id="f-name" name="name" type="text" required>
-                <p class="field-error" id="f-name-error"></p>
-              </div>
-              <div class="field">
-                <label for="f-phone">Phone Number</label>
-                <input id="f-phone" name="phone" type="tel" required>
-                <p class="field-error" id="f-phone-error"></p>
-              </div>
-              <input type="hidden" name="interest" value="RERA Department Liaison">
-              <div class="field">
-                <label for="f-message">Project / Layout Details</label>
-                <textarea id="f-message" name="message" rows="3" placeholder="Project name, land extent, number of units/plots, current approval status..."></textarea>
-              </div>
-              <div class="hp"><input name="website" type="text" tabindex="-1"></div>
-              <div class="field">
-                <label class="consent">
-                  <input id="f-consent" name="consent" type="checkbox" required>
-                  <span>I agree to be contacted regarding this RERA query.</span>
-                </label>
-                <p class="field-error" id="f-consent-error"></p>
-              </div>
-<div class="form-actions">
-                            <button class="btn" type="submit">Submit for RERA Audit</button>
-              <button class="btn btn-whatsapp" type="button" data-whatsapp-submit>
-                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3Z"/></svg>
-                <span>Send via WhatsApp</span>
-              </button>
-            </div>
-              <p class="form-status" data-form-status></p>
-            </form>
           </div>
         </div>
       </div>
@@ -153,30 +119,43 @@
   <footer class="site-footer">
     <div class="wrap">
       <div class="footer-top">
-        <div>
+        <div class="footer-brand-col">
           <div class="footer-mark"><span class="vd-mark" aria-hidden="true"></span><p class="footer-word">Verna Developers</p></div>
-          <p class="note" style="margin-top: 0.75rem;">Property consultants in Bengaluru since 2000.</p>
+          <p class="footer-tagline">Property. Approvals. Solutions. — Bengaluru's trusted land &amp; statutory liaison consultants since 2000.</p>
+          <a class="btn" href="contact.html" style="background: #ffffff; color: var(--navy); min-height: 2.65rem; padding: 0.6rem 1.3rem; font-size: 0.88rem;">Book Free Consultation →</a>
         </div>
         <div class="footer-hq">
           <h3>Office Headquarters</h3>
           <p>
             <strong>Verna Developers</strong><br>
             Unit 1102, 11th Floor, Barton Centre,<br>
-            Mahatma Gandhi Road, Shanthala Nagar, Ashok Nagar,<br>
+            Mahatma Gandhi Road, Ashok Nagar,<br>
             Bengaluru, Karnataka – 560001
           </p>
-          <p class="footer-meta"><strong>Hours:</strong> Monday – Saturday, 9:30 AM – 7:30 PM (IST)</p>
-          <p class="footer-meta"><strong>Coverage:</strong> Bangalore Urban, Bangalore Rural, and Ramanagara districts</p>
-          <p class="footer-meta"><strong>Consultation:</strong> In-person consultations available by prior appointment across Bengaluru.</p>
+          <p class="footer-meta"><strong>Hours:</strong> Mon – Sat, 9:30 AM – 7:30 PM (IST)</p>
+          <p class="footer-meta"><strong>Coverage:</strong> Bangalore Urban, Rural &amp; Ramanagara</p>
+        </div>
+        <div class="footer-map-card">
+          <iframe
+            class="footer-map-frame"
+            title="Verna Developers Office Location on Google Maps"
+            src="https://maps.google.com/maps?q=Barton%20Centre%2C%20Mahatma%20Gandhi%20Road%2C%20Bengaluru%20560001&t=&z=15&ie=UTF8&iwloc=&output=embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen></iframe>
+          <a class="footer-map-link" href="https://maps.google.com/?q=Barton+Centre+Mahatma+Gandhi+Road+Bengaluru+560001" target="_blank" rel="noopener">
+            <span>📍 Barton Centre, MG Road • Open in Google Maps</span>
+            <span>↗</span>
+          </a>
         </div>
       </div>
       <div class="footer-cols">
-        <div><h3>Government Bodies</h3><ul><li><a href="dept-rera.html">RERA</a></li><li><a href="dept-bda.html">BDA</a></li><li><a href="dept-bbmp.html">BBMP</a></li><li><a href="dept-kiadb.html">KIADB</a></li><li><a href="departments.html">All Authorities</a></li></ul></div>
-        <div><h3>Core Services</h3><ul><li><a href="service-residential-industrial-liaison.html">Land Liaison</a></li><li><a href="service-agriculture-land-conversion.html">Land Conversion</a></li><li><a href="service-buying-selling.html">Buying & Selling</a></li><li><a href="services.html">All Services</a></li></ul></div>
-        <div><h3>Direct Call</h3><ul><li><a href="tel:+919620253180">96202 53180</a></li><li><a href="tel:+919916310226">99163 10226</a></li><li><a href="tel:+919353128035">93531 28035</a></li></ul></div>
-        <div><h3>Office Location</h3><p class="note" style="color: var(--on-navy-2);">Unit 1102, 11th Floor, Barton Centre, MG Road, Bengaluru, Karnataka 560001</p></div>
+        <div><h3>Explore</h3><ul><li><a href="services.html">Services</a></li><li><a href="departments.html">Departments</a></li><li><a href="team.html">Team</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+        <div><h3>Call Directly</h3><ul><li><a href="tel:+919620253180">96202 53180</a></li><li><a href="tel:+919916310226">99163 10226</a></li><li><a href="tel:+919353128035">93531 28035</a></li></ul></div>
+        <div><h3>Write</h3><ul><li><a href="mailto:vernadevelopers1@gmail.com">vernadevelopers1@gmail.com</a></li><li><a href="https://wa.me/919620253180" rel="noopener">WhatsApp Us</a></li></ul></div>
+        <div><h3>Sister Company</h3><ul><li><a href="https://www.kaids.in/" rel="noopener">KAIDS — Industrial Documentation</a></li></ul></div>
       </div>
-      <div class="footer-legal note"><p>© 2026 Verna Developers. Bengaluru.</p></div>
+      <div class="footer-legal note"><p>© 2026 Verna Developers. All rights reserved.<br><span style="display:inline-block;margin-top:0.35rem;">Developed by <a href="https://www.digifootprint.in/" target="_blank" rel="noopener" style="color:var(--cream);font-weight:600;text-decoration:underline;text-underline-offset:0.25em;">DigitalFootprint</a> with <span aria-label="love" style="color:#ff5c77;">&#10084;&#65039;</span></span></p><p>Bengaluru, Karnataka</p></div>
     </div>
   </footer>
 </body>

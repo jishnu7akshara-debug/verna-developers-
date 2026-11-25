@@ -484,12 +484,16 @@
 
   // ==================== Dynamic Public Testimonials Loader ====================
   var testiContainer = document.getElementById('public-testimonials-container');
+  var testiSection = document.getElementById('testimonials');
   if (testiContainer) {
     fetch('/api/testimonials')
       .then(function (r) { return r.json(); })
       .then(function (list) {
         var activeItems = (list || []).filter(function (t) { return t.active !== false; });
-        if (!activeItems.length) return;
+        if (!activeItems.length) {
+          if (testiSection) testiSection.style.display = 'none';
+          return;
+        }
 
         testiContainer.innerHTML = '';
         activeItems.forEach(function (t) {
@@ -517,6 +521,7 @@
         });
       })
       .catch(function (err) {
+        if (testiSection) testiSection.style.display = 'none';
         console.warn('Could not load testimonials:', err);
       });
   }
@@ -545,4 +550,37 @@
       return;
     }
   });
+  // ==================== Global Scroll-Reveal & Auto-Stagger Animations ====================
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    var autoTargets = $$(
+      '.govt-auth-card, .service-card, .service-feature-card, .about-points > div, .team-grid .member, .channels a, .prop, .form, .footer-cols > div'
+    );
+    autoTargets.forEach(function (el, idx) {
+      if (!el.hasAttribute('data-reveal')) {
+        el.setAttribute('data-reveal', '');
+      }
+      if (!el.style.getPropertyValue('--i')) {
+        var parent = el.parentElement;
+        var siblings = parent ? Array.prototype.indexOf.call(parent.children, el) : idx;
+        el.style.setProperty('--i', String(Math.min(Math.max(siblings, 0), 8)));
+      }
+      el.classList.add('is-pending');
+    });
+
+    var revealEls = $$('[data-reveal]');
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('is-pending');
+          entry.target.classList.add('is-revealed');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+    revealEls.forEach(function (el) {
+      el.classList.add('is-pending');
+      io.observe(el);
+    });
+  }
 })();
