@@ -570,6 +570,43 @@
       return;
     }
   });
+  // ==================== Bottom Tab Bar: active tab highlighting ====================
+  (function () {
+    var tabs = document.querySelectorAll('.btab[data-tab]');
+    if (!tabs.length) return;
+    var page = location.pathname.split('/').pop() || 'index.html';
+    if (!page || page === '') page = 'index.html';
+    var tabMap = {
+      'index.html': 'home', '': 'home',
+      'services.html': 'services',
+      'departments.html': 'departments',
+      'dept-bbmp.html': 'departments', 'dept-bda.html': 'departments',
+      'dept-bmicapa.html': 'departments', 'dept-bmrcl.html': 'departments',
+      'dept-bmrda.html': 'departments', 'dept-citb.html': 'departments',
+      'dept-kiadb.html': 'departments', 'dept-rera.html': 'departments',
+      'team.html': 'team',
+      'contact.html': 'contact',
+      'about.html': 'home'
+    };
+    var active = tabMap[page] || '';
+    tabs.forEach(function (tab) {
+      if (tab.getAttribute('data-tab') === active) {
+        tab.setAttribute('aria-current', 'page');
+        tab.classList.add('is-active');
+      }
+    });
+
+    // Hide bottom bar when virtual keyboard is open
+    if (window.visualViewport) {
+      var bottomBar = document.querySelector('.bottom-tab-bar');
+      window.visualViewport.addEventListener('resize', function () {
+        if (!bottomBar) return;
+        var diff = window.innerHeight - window.visualViewport.height;
+        bottomBar.style.display = diff > 100 ? 'none' : '';
+      });
+    }
+  })();
+
   // ==================== Floating Bottom-Right WhatsApp Button ====================
   if (!document.querySelector('.floating-whatsapp')) {
     var waFloat = document.createElement('a');

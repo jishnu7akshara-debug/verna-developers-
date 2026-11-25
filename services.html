@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en-IN" class="no-js">
 <head>
   <meta charset="utf-8">
@@ -18,8 +18,8 @@
   <link rel="manifest" href="site.webmanifest">
   <link rel="preload" href="assets/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/site.css?v=2045">
-  <script src="assets/js/site.js?v=2045" defer></script>
+  <link rel="stylesheet" href="assets/css/site.css?v=2046">
+  <script src="assets/js/site.js?v=2046" defer></script>
 </head>
 <body>
   <!-- Page Preloader Animation with Verna Developers Logo -->
@@ -45,7 +45,7 @@
       <nav class="nav" id="nav" aria-label="Primary">
         <ul>
           <li><a href="about.html">About</a></li>
-          <li><a href="services.html"index.html</li>
+          <li><a href="services.html">Services</a></li>
           <li><a href="departments.html">Departments</a></li>
           <li><a href="team.html">Team</a></li>
           <li><a href="contact.html">Contact</a></li>
@@ -290,9 +290,27 @@
     </div>
   </footer>
 
-  <div class="mobile-bar" data-mobile-bar>
-    <a class="btn btn-quiet" href="tel:+919916310226">Call</a>
-    <a class="btn" href="https://wa.me/919916310226" rel="noopener">WhatsApp</a>
-  </div>
+  <nav class="bottom-tab-bar" aria-label="Bottom navigation">
+    <a class="btab" href="index.html" data-tab="home">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      <span>Home</span>
+    </a>
+    <a class="btab" href="services.html" data-tab="services">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+      <span>Services</span>
+    </a>
+    <a class="btab" href="departments.html" data-tab="departments">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
+      <span>Depts</span>
+    </a>
+    <a class="btab" href="team.html" data-tab="team">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+      <span>Team</span>
+    </a>
+    <a class="btab btab-cta" href="contact.html" data-tab="contact">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+      <span>Contact</span>
+    </a>
+  </nav>
 </body>
 </html>
