@@ -2077,9 +2077,12 @@ button, a, input, select, textarea {
   }
   /* Hide floating WhatsApp FAB on phones — bottom tab bar covers it */
   /* RESTORED: Show WhatsApp FAB on phones, just position it above the bottom bar */
-  /* Header: compact on phones */
+  /* Header: compact on phones — hide hamburger since bottom tab bar is nav */
   .site-header {
     z-index: var(--z-header);
+  }
+  .menu-toggle {
+    display: none !important;
   }
   /* Scroll margin so anchor links clear the header */
   section[id], div[id] {
