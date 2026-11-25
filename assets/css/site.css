@@ -143,11 +143,14 @@ p { max-width: 65ch; }
 
 @media (max-width: 60rem) {
   .header-cta { display: none; }
-  .menu-toggle { display: inline-flex; align-items: center; gap: .6rem; min-height: 2.75rem; padding: 0 .25rem 0 .75rem; background: none; border: 0; font-weight: 620; cursor: pointer; color: var(--navy); }
-  .menu-toggle span { display: grid; gap: 5px; width: 1.5rem; }
-  .menu-toggle span::before, .menu-toggle span::after { content: ""; height: 2px; background: var(--navy); transition: transform .3s var(--ease); }
-  .nav-open .menu-toggle span::before { transform: translateY(3.5px) rotate(45deg); }
-  .nav-open .menu-toggle span::after { transform: translateY(-3.5px) rotate(-45deg); }
+  .menu-toggle { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0; background: none; border: 0; cursor: pointer; color: var(--navy); }
+  .hamburger-lines { display: grid; gap: 5px; width: 22px; }
+  .hamburger-lines::before, .hamburger-lines::after { content: ""; height: 2px; background: var(--navy); border-radius: 2px; transition: transform .3s var(--ease); }
+  /* middle bar via box-shadow */
+  .hamburger-lines { position: relative; }
+  .hamburger-lines::before { box-shadow: 0 7px 0 var(--navy); }
+  .nav-open .hamburger-lines::before { box-shadow: none; transform: translateY(7px) rotate(45deg); }
+  .nav-open .hamburger-lines::after { transform: translateY(-0px) rotate(-45deg); }
   .nav { position: fixed; inset: var(--header-h) 0 0 0; background: var(--cream); padding: 1.5rem var(--gutter) 2rem; overflow-y: auto; visibility: hidden; opacity: 0; transform: translateY(-.75rem); transition: opacity .25s var(--ease), transform .35s var(--ease-expo), visibility 0s .35s; }
   .nav-open .nav { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
   .nav ul { flex-direction: column; gap: 0; }
@@ -2073,9 +2076,7 @@ button, a, input, select, textarea {
     display: none !important;
   }
   /* Hide floating WhatsApp FAB on phones — bottom tab bar covers it */
-  .floating-whatsapp {
-    display: none !important;
-  }
+  /* RESTORED: Show WhatsApp FAB on phones, just position it above the bottom bar */
   /* Header: compact on phones */
   .site-header {
     z-index: var(--z-header);
@@ -2132,7 +2133,7 @@ button, a, input, select, textarea {
 @media (max-width: 60rem) {
   .floating-whatsapp {
     right: 1rem;
-    bottom: 4.85rem;
+    bottom: calc(var(--bottom-bar-h, 64px) + env(safe-area-inset-bottom, 0px) + 12px);
     width: 3.25rem;
     height: 3.25rem;
   }

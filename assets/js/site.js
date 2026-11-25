@@ -88,7 +88,6 @@
     root.classList.toggle('nav-open', open);
     document.body.classList.toggle('nav-open', open);
     toggle.setAttribute('aria-expanded', String(open));
-    toggle.firstChild.textContent = open ? 'Close' : 'Menu';
     if (open && nav) {
       var firstLink = $('a', nav);
       if (firstLink) setTimeout(function () { firstLink.focus(); }, 60);
