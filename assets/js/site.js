@@ -86,16 +86,36 @@
   var nav = $('#nav');
   function setMenu(open) {
     root.classList.toggle('nav-open', open);
+    document.body.classList.toggle('nav-open', open);
     toggle.setAttribute('aria-expanded', String(open));
     toggle.firstChild.textContent = open ? 'Close' : 'Menu';
+    if (open && nav) {
+      var firstLink = $('a', nav);
+      if (firstLink) setTimeout(function () { firstLink.focus(); }, 60);
+    }
   }
   if (toggle && nav) {
     toggle.addEventListener('click', function () { setMenu(!root.classList.contains('nav-open')); });
-    nav.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && root.classList.contains('nav-open')) { setMenu(false); toggle.focus(); }
+    nav.addEventListener('click', function (e) {
+      if (e.target.closest('a')) setMenu(false);
     });
-    window.matchMedia('(min-width: 56rem)').addEventListener('change', function (m) { if (m.matches) setMenu(false); });
+    document.addEventListener('click', function (e) {
+      if (root.classList.contains('nav-open') && !e.target.closest('#nav') && !e.target.closest('[data-menu-toggle]')) {
+        setMenu(false);
+      }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (!root.classList.contains('nav-open')) return;
+      if (e.key === 'Escape') { setMenu(false); toggle.focus(); return; }
+      if (e.key === 'Tab') {
+        var focusables = [toggle].concat($$('a[href], button:not([disabled])', nav));
+        var first = focusables[0];
+        var last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+    window.matchMedia('(min-width: 60rem)').addEventListener('change', function (m) { if (m.matches) setMenu(false); });
   }
 
   /* ---------- Current page / section in the nav ---------- */
