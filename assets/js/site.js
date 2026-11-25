@@ -564,23 +564,41 @@
         var siblings = parent ? Array.prototype.indexOf.call(parent.children, el) : idx;
         el.style.setProperty('--i', String(Math.min(Math.max(siblings, 0), 8)));
       }
-      el.classList.add('is-pending');
     });
 
     var revealEls = $$('[data-reveal]');
+    function revealElement(el) {
+      el.classList.remove('is-pending');
+      el.classList.add('is-revealed');
+    }
+
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          entry.target.classList.remove('is-pending');
-          entry.target.classList.add('is-revealed');
+          revealElement(entry.target);
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    }, { threshold: 0.01, rootMargin: '0px 0px 80px 0px' });
 
     revealEls.forEach(function (el) {
-      el.classList.add('is-pending');
-      io.observe(el);
+      var rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 80) {
+        revealElement(el);
+      } else {
+        el.classList.add('is-pending');
+        io.observe(el);
+      }
     });
+
+    // Safety fallback: never leave elements stuck invisible on any viewport
+    setTimeout(function () {
+      $$('[data-reveal].is-pending').forEach(function (el) {
+        if (el.getBoundingClientRect().top < window.innerHeight + 160) {
+          revealElement(el);
+          io.unobserve(el);
+        }
+      });
+    }, 1200);
   }
 })();
