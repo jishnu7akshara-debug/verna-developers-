@@ -1875,6 +1875,53 @@ button, a, input, select, textarea {
   }
 }
 
+/* Floating Bottom-Right WhatsApp Button (Same Logo Navy #10224A) */
+.floating-whatsapp {
+  position: fixed;
+  right: 1.4rem;
+  bottom: 1.4rem;
+  z-index: 95;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: var(--navy, #10224A);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 10px 28px -4px rgba(16, 34, 74, 0.45);
+  animation: pulse-ring 3s ease-out 1.5s infinite;
+  transition: transform 0.25s var(--ease-expo, cubic-bezier(0.16, 1, 0.3, 1)), background-color 0.2s ease, box-shadow 0.25s ease;
+}
+.floating-whatsapp svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  fill: currentColor;
+}
+.floating-whatsapp:hover {
+  background: var(--navy-2, #1C3366);
+  color: #ffffff;
+  transform: translateY(-3px) scale(1.06);
+  box-shadow: 0 16px 32px -6px rgba(16, 34, 74, 0.55);
+  animation: none;
+}
+.floating-whatsapp:active {
+  transform: scale(0.96);
+}
+@media (max-width: 60rem) {
+  .floating-whatsapp {
+    right: 1rem;
+    bottom: 4.85rem;
+    width: 3.25rem;
+    height: 3.25rem;
+  }
+  .floating-whatsapp svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+}
+
 /* Small Phones (<= 380px) */
 @media (max-width: 23.75rem) {
   .brand .vd-mark {
