@@ -303,7 +303,7 @@
     var status = $('[data-form-status]', form);
     var submit = $('button[type="submit"]', form);
     var submitLabel = submit ? submit.textContent : 'Send enquiry';
-    var phoneFallback = form.getAttribute('data-phone') || '96202 53180';
+    var phoneFallback = form.getAttribute('data-phone') || '99163 10226';
     var startedAt = 0;
     form.addEventListener('focusin', function () { if (!startedAt) startedAt = Date.now(); });
 
@@ -444,7 +444,7 @@
         if (!validateAll()) return;
 
         var payload = getPayload();
-        var waPhone = '919620253180';
+        var waPhone = '919916310226';
 
         var lines = [
           '*New Property Enquiry - Verna Developers*',
