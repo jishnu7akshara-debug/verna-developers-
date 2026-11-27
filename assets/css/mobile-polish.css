@@ -102,27 +102,23 @@ p, h1, h2, h3, h4, li, td, th, a, button, label, span {
     }
   }
 
-  /* -- 2e. GOVT AUTHORITY GRID: 2-column on phones -- */
+  /* -- 2e. GOVT AUTHORITY GRID: single column on phones for full readability -- */
   .govt-authority-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 0.875rem;
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
   }
   .govt-auth-thumb img {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 9;
     width: 100%;
     object-fit: cover;
   }
   .govt-auth-title {
-    font-size: 0.85rem;
-    padding: 0.5rem 0.6rem 0.65rem;
+    font-size: 1.05rem;
+    padding: 0.75rem 1rem 0.4rem;
   }
   .govt-auth-desc {
-    font-size: 0.8rem;
-    padding: 0 0.6rem 0.65rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    font-size: 0.92rem;
+    padding: 0 1rem 0.9rem;
   }
 
   /* -- 2f. TICKER / MARQUEE: calm speed already set in JS -- */
